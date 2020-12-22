@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Feed {
+  id            String         @id
+  name          String
+  url           String         @unique
+  author        User?          @relation("FeedAuthor", fields: [authorId], references: [id])
+  authorId      String?
+  savedArticles SavedArticle[]
+  bundles       Bundle[]
+  tags          FeedTag[]
+  likes         User[]         @relation("FeedUserLikes")
+}
+
+model Bundle {
+  id          String      @id
+  name        String
+  description String      @default("")
+  author      User?       @relation("BundleAuthor", fields: [authorId], references: [id])
+  authorId    String?
+  tags        BundleTag[]
+  feeds       Feed[]
+  likes       User[]      @relation("BundleUserLikes")
+
+}
+
+model User {
+  id            String         @id
+  auth0         String         @unique
+  nickname      String?
+  picture       String?
+  bundles       Bundle[]       @relation("BundleAuthor")
+  feeds         Feed[]         @relation("FeedAuthor")
+  bundleLikes   Bundle[]       @relation("BundleUserLikes")
+  feedLikes     Feed[]         @relation("FeedUserLikes")
+  savedArticles SavedArticle[]
+}
+
+model SavedArticle {
+  id       String  @id
+  content  Json
+  feed     Feed?   @relation(fields: [feedId], references: [id])
+  feedId   String?
+  author   User?   @relation(fields: [authorId], references: [id])
+  authorId String?
+}
+
+model BundleTag {
+  id      String   @id
+  name    String   @unique
+  bundles Bundle[]
+}
+
+model FeedTag {
+  id    String @id
+  name  String @unique
+  feeds Feed[]
+}
