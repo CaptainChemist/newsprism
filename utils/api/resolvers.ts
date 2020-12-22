@@ -13,11 +13,13 @@ export const resolvers = {
     ...createFieldResolver('feed', 'author'),
     ...createFieldResolver('feed', 'tags'),
     ...createFieldResolver('feed', 'bundles'),
+    ...createFieldResolver('feed', 'likes'),
   },
   Bundle: {
     ...createFieldResolver('bundle', 'author'),
     ...createFieldResolver('bundle', 'tags'),
     ...createFieldResolver('bundle', 'feeds'),
+    ...createFieldResolver('bundle', 'likes'),
   },
   BundleTag: {
     ...createFieldResolver('bundleTag', 'bundles'),
@@ -46,6 +48,22 @@ export const resolvers = {
         data: { ...data, ...author },
       });
       return result;
+    },
+    likeBundle: (parent, { data }, { prisma, user }) => {
+      const { bundleId, likeState } = data;
+      const connectState = likeState ? 'connect' : 'disconnect';
+      return prisma.bundle.update({
+        where: { id: bundleId },
+        data: { likes: { [connectState]: { id: user.id } } },
+      });
+    },
+    likeFeed: (parent, { data }, { prisma, user }) => {
+      const { feedId, likeState } = data;
+      const connectState = likeState ? 'connect' : 'disconnect';
+      return prisma.feed.update({
+        where: { id: feedId },
+        data: { likes: { [connectState]: { id: user.id } } },
+      });
     },
   },
 };
