@@ -11,9 +11,19 @@ const createFieldResolver = (modelName, parName) => ({
 export const resolvers = {
   Feed: {
     ...createFieldResolver('feed', 'author'),
+    ...createFieldResolver('feed', 'tags'),
+    ...createFieldResolver('feed', 'bundles'),
   },
   Bundle: {
     ...createFieldResolver('bundle', 'author'),
+    ...createFieldResolver('bundle', 'tags'),
+    ...createFieldResolver('bundle', 'feeds'),
+  },
+  BundleTag: {
+    ...createFieldResolver('bundleTag', 'bundles'),
+  },
+  FeedTag: {
+    ...createFieldResolver('feedTag', 'feeds'),
   },
   Query: {
     hello: (parent, args, context) => 'hi!',
