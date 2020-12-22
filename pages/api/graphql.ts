@@ -13,7 +13,7 @@ const cors = Cors();
 const schema = applyMiddleware(
   makeExecutableSchema({ typeDefs, resolvers }),
   log,
-  permissions,
+  // permissions,
 );
 
 export const config = {
