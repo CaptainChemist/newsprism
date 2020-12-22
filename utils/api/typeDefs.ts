@@ -125,6 +125,39 @@ export const typeDefs = gql`
     search: String
   }
 
+  input FeedUpdateInput {
+    id: String
+    url: String
+    name: String
+    tags: NestedFeedTagUpdateInput
+  }
+
+  input NestedFeedTagUpdateInput {
+    create: [FeedTagCreateInput]
+    connect: [FeedTagWhereUniqueInput]
+    disconnect: [FeedTagWhereUniqueInput]
+  }
+
+  input BundleUpdateInput {
+    id: String
+    name: String
+    description: String
+    tags: NestedBundleTagUpdateInput
+    feeds: NestedBundleFeedUpdateInput
+  }
+
+  input NestedBundleTagUpdateInput {
+    create: [BundleTagCreateInput]
+    connect: [BundleTagWhereUniqueInput]
+    disconnect: [BundleTagWhereUniqueInput]
+  }
+
+  input NestedBundleFeedUpdateInput {
+    create: [FeedCreateInput]
+    connect: [FeedWhereUniqueInput]
+    disconnect: [FeedWhereUniqueInput]
+  }
+
   type Query {
     hello: String
     feed(data: FeedInput): Feed
@@ -140,5 +173,7 @@ export const typeDefs = gql`
     createBundle(data: BundleCreateInput): Bundle
     likeBundle(data: likeBundleInput): Bundle
     likeFeed(data: likeFeedInput): Feed
+    updateBundle(data: BundleUpdateInput): Bundle
+    updateFeed(data: FeedUpdateInput): Feed
   }
 `;
