@@ -113,12 +113,27 @@ export const typeDefs = gql`
     likeState: Boolean
   }
 
+  input FindFeedTagsInput {
+    search: String
+  }
+
+  input FindBundleTagsInput {
+    search: String
+  }
+
+  input FindFeedsInput {
+    search: String
+  }
+
   type Query {
     hello: String
     feed(data: FeedInput): Feed
     bundle(data: BundleInput): Bundle
     feeds: [Feed]
     bundles: [Bundle]
+    findFeedTags(data: FindFeedTagsInput): [FeedTag]
+    findBundleTags(data: FindBundleTagsInput): [BundleTag]
+    findFeeds(data: FindFeedsInput): [Feed]
   }
   type Mutation {
     createFeed(data: FeedCreateInput): Feed
