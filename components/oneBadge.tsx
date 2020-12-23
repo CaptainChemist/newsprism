@@ -6,6 +6,7 @@ import {
   BundleObject,
   FeedObject,
 } from '../utils/types';
+import { Minus, Plus } from './svg';
 
 export const OneBadge = ({
   item,
@@ -32,6 +33,32 @@ export const OneBadge = ({
       <span
         className={`flex justify-center text-sm py-2 px-2 rounded-lg bg-${color}-200`}
       >
+        {action === ActionType.ADD ? (
+          <div
+            onClick={() => {
+              setItem((currState) => ({
+                ...currState,
+                [fieldName]: [...currState[fieldName], { ...item }],
+              }));
+            }}
+          >
+            <Plus className="h-4 w-4 text-gray-500" />
+          </div>
+        ) : null}
+        {action === ActionType.CREATE ? (
+          <div
+            onClick={() => {
+              setItem((currState) => ({
+                ...currState,
+                [fieldName]: currState[fieldName].filter(
+                  (o) => item.name !== o.name,
+                ),
+              }));
+            }}
+          >
+            <Minus className="h-4 w-4 text-gray-500" />
+          </div>
+        ) : null}
         <p className={`text-xs text-${color}-600 text-center`}>{item.name}</p>
       </span>
     </div>

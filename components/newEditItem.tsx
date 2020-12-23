@@ -5,15 +5,22 @@ import {
   CREATE_FEED_MUTATION,
 } from '../utils/api/graphql/mutations';
 import {
+  FIND_BUNDLE_TAGS_QUERY,
+  FIND_FEEDS_QUERY,
+  FIND_FEED_TAGS_QUERY,
+} from '../utils/api/graphql/queries';
+import {
   ActionType,
   BadgeFieldName,
   BundleObject,
   FeedObject,
   ItemType,
   NewItemState,
+  SearchQueryName,
 } from '../utils/types';
 import { BadgeList } from './badgeList';
 import { GenerateInputField } from './generateInputField';
+import { SearchItems } from './searchItems';
 import { ErrorSign, WaitingClock } from './svg';
 
 export const NewEditItem = ({ type }: { type: ItemType }) => {
@@ -88,6 +95,17 @@ export const NewEditItem = ({ type }: { type: ItemType }) => {
             </div>
             <div className="py-2">
               <label className="block py-2">Add New Tag:</label>
+              <SearchItems
+                queryName={
+                  isFeed
+                    ? SearchQueryName.findFeedTags
+                    : SearchQueryName.findBundleTags
+                }
+                query={isFeed ? FIND_FEED_TAGS_QUERY : FIND_BUNDLE_TAGS_QUERY}
+                setItem={setItem}
+                currentItem={currentItem}
+                fieldName={BadgeFieldName.tags}
+              />
             </div>
             {isFeed ? null : (
               <>
@@ -104,6 +122,13 @@ export const NewEditItem = ({ type }: { type: ItemType }) => {
                 </div>
                 <div className="py-2">
                   <label className="block py-2">Add New Feed:</label>
+                  <SearchItems
+                    queryName={SearchQueryName.findFeeds}
+                    query={FIND_FEEDS_QUERY}
+                    setItem={setItem}
+                    currentItem={currentItem}
+                    fieldName={BadgeFieldName.feeds}
+                  />
                 </div>
               </>
             )}
