@@ -1,11 +1,14 @@
 import Link from 'next/link';
 import { Dispatch, SetStateAction } from 'react';
 import {
+  ActionType,
+  BadgeFieldName,
   BundleObject,
   FeedObject,
   ItemType,
   SelectedFeedState,
 } from '../utils/types';
+import { BadgeList } from './badgeList';
 import { DoubleArrowDown, DoubleArrowRight } from './svg';
 
 export const OneListItem = ({
@@ -56,13 +59,23 @@ export const OneListItem = ({
           <div className="col-span-6 py-2">
             <h3>Tags</h3>
             <div className="grid grid-cols-3 gap-2">
-              <p>tags...</p>
+              <BadgeList
+                fieldName={BadgeFieldName.tags}
+                action={ActionType.NONE}
+                item={item}
+              />
             </div>
           </div>
           <div className="col-span-6 py-2">
             <h3>{isFeed ? 'Bundles' : 'Feeds'}</h3>
             <div className="grid grid-cols-3 gap-2">
-              <p>child items...</p>
+              <BadgeList
+                fieldName={
+                  isFeed ? BadgeFieldName.bundles : BadgeFieldName.feeds
+                }
+                action={ActionType.NONE}
+                item={item}
+              />
             </div>
           </div>
         </div>

@@ -31,3 +31,15 @@ export type SelectedFeedState = {
   editMode: boolean;
   newMode: boolean;
 };
+
+export enum BadgeFieldName {
+  tags = 'tags',
+  feeds = 'feeds',
+  bundles = 'bundles',
+}
+
+export enum ActionType {
+  ADD = 'ADD',
+  CREATE = 'CREATE',
+  NONE = 'NONE',
+}
