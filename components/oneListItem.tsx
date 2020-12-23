@@ -23,8 +23,8 @@ export const OneListItem = ({
   type: ItemType;
   selected?: SelectedFeedState;
   setSelected?: Dispatch<SetStateAction<SelectedFeedState>>;
-  useSelected: boolean;
-  allowEdits: boolean;
+  useSelected?: boolean;
+  allowEdits?: boolean;
 }) => {
   const isFeed = type === ItemType.FeedType;
   const isSelected = useSelected && selected && selected.id === item.id;
