@@ -1,8 +1,10 @@
+import { Layout } from '../components/layout';
+
 const Index = () => {
   return (
-    <div>
-      <p>Index Page</p>
-    </div>
+    <Layout>
+      <h3 className="justify-start flex text-lg font-medium py-4">Home Page</h3>
+    </Layout>
   );
 };
 
