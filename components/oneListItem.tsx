@@ -9,6 +9,7 @@ import {
   SelectedFeedState,
 } from '../utils/types';
 import { BadgeList } from './badgeList';
+import { ProfilePic } from './profilePic';
 import { DoubleArrowDown, DoubleArrowRight } from './svg';
 
 export const OneListItem = ({
@@ -53,7 +54,7 @@ export const OneListItem = ({
           </div>
 
           <div className="flex col-span-6 py-0 space-x-2">
-            {item.author ? <p>profile pic</p> : null}
+            {item.author ? <ProfilePic author={item.author} /> : null}
           </div>
 
           <div className="col-span-6 py-2">

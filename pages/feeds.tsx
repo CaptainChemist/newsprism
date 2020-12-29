@@ -58,7 +58,11 @@ const FeedsPage = () => {
         ) : null}
       </div>
       {(selected.editMode || selected.newMode) && user ? (
-        <NewEditItem type={ItemType.FeedType} />
+        <NewEditItem
+          type={ItemType.FeedType}
+          selected={selected}
+          setSelected={setSelected}
+        />
       ) : null}
       <ItemList
         type={ItemType.FeedType}

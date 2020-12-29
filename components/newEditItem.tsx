@@ -1,5 +1,5 @@
-import { useMutation } from '@apollo/client';
-import { useState } from 'react';
+import { useMutation, useQuery } from '@apollo/client';
+import { Dispatch, SetStateAction, useState } from 'react';
 import {
   CREATE_BUNDLE_MUTATION,
   CREATE_FEED_MUTATION,
@@ -8,7 +8,10 @@ import {
   FIND_BUNDLE_TAGS_QUERY,
   FIND_FEEDS_QUERY,
   FIND_FEED_TAGS_QUERY,
+  ME_QUERY,
 } from '../utils/api/graphql/queries';
+import { optimisticCache } from '../utils/optimisticCache';
+import { prepareNewUpdateObj } from '../utils/prepareUpdateObj';
 import {
   ActionType,
   BadgeFieldName,
@@ -17,13 +20,23 @@ import {
   ItemType,
   NewItemState,
   SearchQueryName,
+  SelectedFeedState,
 } from '../utils/types';
+import { updateCache } from '../utils/update';
 import { BadgeList } from './badgeList';
 import { GenerateInputField } from './generateInputField';
 import { SearchItems } from './searchItems';
 import { ErrorSign, WaitingClock } from './svg';
 
-export const NewEditItem = ({ type }: { type: ItemType }) => {
+export const NewEditItem = ({
+  type,
+  selected,
+  setSelected,
+}: {
+  type: ItemType;
+  selected: SelectedFeedState;
+  setSelected: Dispatch<SetStateAction<SelectedFeedState>>;
+}) => {
   const isFeed = type === ItemType.FeedType;
   const initialFeed: FeedObject = { name: '', url: '', tags: [] };
   const initialBundle: BundleObject = {
@@ -41,6 +54,9 @@ export const NewEditItem = ({ type }: { type: ItemType }) => {
     createItemMutation,
     { loading: createLoading, error: createError },
   ] = useMutation(isFeed ? CREATE_FEED_MUTATION : CREATE_BUNDLE_MUTATION);
+  const { data: meData, loading: meLoading, error: meError } = useQuery(
+    ME_QUERY,
+  );
 
   if (createLoading) {
     return <WaitingClock className="my-20 h-10 w-10 text-gray-500 m-auto" />;
@@ -54,6 +70,25 @@ export const NewEditItem = ({ type }: { type: ItemType }) => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          const data = prepareNewUpdateObj(currentItem);
+          console.log(data);
+          createItemMutation({
+            variables: { data },
+            update: updateCache(isFeed, 'create'),
+            optimisticResponse: optimisticCache(
+              isFeed,
+              'create',
+              data,
+              currentItem,
+              meData,
+            ),
+          });
+          setItem(initialState);
+          setSelected((currState) => ({
+            ...currState,
+            editMode: false,
+            newMode: false,
+          }));
         }}
       >
         <div className="grid grid-cols-12 gap-4 rounded-md border-4 my-4 py-2 px-4">
