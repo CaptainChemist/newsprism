@@ -33,6 +33,7 @@
     "react-dom": "^17.0.1",
     "react-js-pagination": "^3.0.3",
     "rss-parser": "^3.10.0",
+    "string-strip-html": "^7.0.3",
     "tailwindcss": "^2.0.2",
     "uuid": "^8.3.2"
   },

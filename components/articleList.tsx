@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Pagination from 'react-js-pagination';
-import { cursorTo } from 'readline';
+import { OneArticle } from './oneArticle';
 
 export const ArticleList = ({ articleList }) => {
   const [currentPagination, setPagination] = useState({
@@ -21,7 +21,7 @@ export const ArticleList = ({ articleList }) => {
       <h3 className="py-4 font-medium text-lg">Articles</h3>
       <div className="grid grid-cols-1 gap-4">
         {currentArticles.map(({ feed, ...oneArticle }) => (
-          <p key={oneArticle.title}>{oneArticle.title}</p>
+          <OneArticle article={oneArticle} feed={feed} key={oneArticle.title} />
         ))}
         <Pagination
           innerClass="rounded py-2 px-2 flex"

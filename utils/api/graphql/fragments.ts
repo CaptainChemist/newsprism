@@ -71,7 +71,7 @@ export const BUNDLE_FRAGMENT = gql`
 export const SAVED_ARTICLE_FRAGMENT = gql`
   fragment SavedArticleFragment on SavedArticle {
     id
-    contents
+    content
     url
     author {
       ...AuthorFragment

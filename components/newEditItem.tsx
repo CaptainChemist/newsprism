@@ -139,7 +139,9 @@ export const NewEditItem = ({
       >
         <div className="grid grid-cols-12 gap-4 rounded-md border-4 my-4 py-2 px-4">
           <h3 className="col-span-12 text-lg font-medium py-2">
-            {isFeed ? 'New Feed' : 'New Bundle'}
+            {`${selected.editMode ? 'Edit ' : 'New '}${
+              isFeed ? 'Feed' : 'Bundle'
+            }`}
           </h3>
 
           <div className="col-span-6">
