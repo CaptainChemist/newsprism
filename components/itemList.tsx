@@ -37,7 +37,7 @@ export const ItemList = ({
         useSelected &&
         itemList &&
         itemList.length > 0 &&
-        selected.id == null
+        selected.id === null
       ) {
         const firstItem = itemList[0];
         await setSelected({
@@ -54,7 +54,7 @@ export const ItemList = ({
     return <NotifyLoading />;
   }
 
-  if (error) {
+  if (error || !itemList) {
     return <NotifyError />;
   }
 
