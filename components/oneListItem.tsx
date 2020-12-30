@@ -12,6 +12,8 @@ import {
 import { useFetchUser } from '../utils/user';
 import { BadgeList } from './badgeList';
 import { ItemEdit } from './itemEdit';
+import { ItemDelete } from './itemDelete';
+
 import { ProfilePic } from './profilePic';
 import { DoubleArrowDown, DoubleArrowRight, WaitingClock } from './svg';
 
@@ -73,6 +75,7 @@ export const OneListItem = ({
                 setSelected={setSelected}
               />
             ) : null}
+            {canManipulate ? <ItemDelete item={item} type={type} /> : null}
           </div>
 
           <div className="flex col-span-6 py-0 space-x-2">
