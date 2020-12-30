@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import * as _ from 'lodash';
 import { NotifyLoading } from './notifyLoading';
 import { NotifyError } from './notifyError';
+import { ArticleList } from './articleList';
 const Parser = require('rss-parser');
 const parser = new Parser();
 import getConfig from 'next/config';
@@ -47,5 +48,5 @@ export const GenerateArticleList = ({ feeds }: { feeds: Feed[] }) => {
   }
 
   console.log(data);
-  return <p>Generate Article List</p>;
+  return <ArticleList articleList={data} />;
 };
