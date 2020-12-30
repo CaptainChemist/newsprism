@@ -16,6 +16,7 @@ import { ItemDelete } from './itemDelete';
 
 import { ProfilePic } from './profilePic';
 import { DoubleArrowDown, DoubleArrowRight, WaitingClock } from './svg';
+import { ItemLike } from './itemLike';
 
 export const OneListItem = ({
   item,
@@ -67,6 +68,7 @@ export const OneListItem = ({
             {!isFeed ? <p>{item['description']}</p> : null}
           </div>
           <div className="col-span-2 flex justify-end">
+            <ItemLike item={item} type={type} />
             {canManipulate ? (
               <ItemEdit
                 item={item}

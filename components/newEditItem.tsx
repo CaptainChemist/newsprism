@@ -117,7 +117,6 @@ export const NewEditItem = ({
                   currentItem,
                   meData,
                 ),
-                update: updateCache(isFeed, 'update'),
               })
             : createItemMutation({
                 variables: { data },
