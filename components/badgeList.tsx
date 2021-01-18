@@ -12,11 +12,13 @@ export const BadgeList = ({
   action,
   setItem,
   item,
+  setSearch,
 }: {
   fieldName: BadgeFieldName;
   action: ActionType;
   item: FeedObject | BundleObject;
   setItem?: Dispatch<SetStateAction<FeedObject | BundleObject>>;
+  setSearch?: Dispatch<SetStateAction<String>>;
 }) => {
   return item[fieldName] && item[fieldName].length > 0 ? (
     <>
@@ -28,6 +30,7 @@ export const BadgeList = ({
           action={action}
           setItem={setItem}
           currentItem={item}
+          setSearch={setSearch}
         />
       ))}
     </>

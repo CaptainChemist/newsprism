@@ -14,12 +14,14 @@ export const OneBadge = ({
   currentItem,
   fieldName,
   setItem,
+  setSearch,
 }: {
   item: FeedTag | BundleTag | FeedObject;
   action: ActionType;
   currentItem?: FeedObject | BundleObject;
   fieldName: BadgeFieldName;
   setItem?: Dispatch<SetStateAction<FeedObject | BundleObject>>;
+  setSearch?: Dispatch<SetStateAction<String>>;
 }) => {
   const color =
     fieldName === BadgeFieldName.tags
@@ -40,6 +42,7 @@ export const OneBadge = ({
                 ...currState,
                 [fieldName]: [...currState[fieldName], { ...item }],
               }));
+              setSearch('');
             }}
           >
             <Plus className="h-4 w-4 text-gray-500" />

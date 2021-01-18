@@ -47,13 +47,15 @@ model User {
 }
 
 model SavedArticle {
-  id       String  @id
+  id       String  @id 
   content  Json
   feed     Feed?   @relation(fields: [feedId], references: [id])
   feedId   String?
   author   User?   @relation(fields: [authorId], references: [id])
   authorId String?
   url String
+
+  @@index([authorId, url])
 }
 
 model BundleTag {

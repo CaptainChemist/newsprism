@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "prisma:init": "prisma init",
-    "prisma:migrate": "prisma migrate dev --preview-feature"
+    "prisma:migrate": "prisma migrate dev --preview-feature",
+    "prisma:generate": "prisma generate"
   },
   "keywords": [],
   "author": "",

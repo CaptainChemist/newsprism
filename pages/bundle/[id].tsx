@@ -45,8 +45,8 @@ const Bundle = ({ id }) => {
         ) : (
           <p>None are present. Why not add one?</p>
         )}
-        <GenerateArticleList feeds={bundle.feeds} />
       </div>
+      <GenerateArticleList feeds={bundle.feeds} />
     </Layout>
   );
 };

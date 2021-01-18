@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 import auth0 from '../auth0';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -38,3 +38,8 @@ export const context = async ({ req }) => {
     return { user: {}, prisma };
   }
 };
+
+export interface Context {
+  prisma: PrismaClient;
+  user: User;
+}

@@ -63,6 +63,19 @@ export const SearchItems = ({
         <input
           className="border-4 rounded w-full py-2 px-3"
           value={search}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              setItem((currState) => ({
+                ...currState,
+                [fieldName]: [
+                  ...currState[fieldName],
+                  { ...dummyNewItem.tags[0] },
+                ],
+              }));
+              setSearch(() => '');
+            }
+          }}
           onChange={(e) => {
             e.persist();
             if (e.target.value !== search) {
@@ -81,6 +94,7 @@ export const SearchItems = ({
             action={ActionType.ADD}
             setItem={setItem}
             item={dummyNewItem}
+            setSearch={setSearch}
           />
         ) : called ? (
           <p className="text-gray-400">No matches</p>

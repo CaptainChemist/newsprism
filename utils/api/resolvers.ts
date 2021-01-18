@@ -1,10 +1,11 @@
+import { Context } from './context';
 import { verifyOwnership } from './verifyOwnership';
 
 const createFieldResolver = (modelName, parName) => ({
-  [parName]: async ({ id }, args, { prisma }) => {
+  [parName]: async ({ id }, args, { prisma }: Context) => {
     const modelResponse = await prisma[modelName].findUnique({
       where: { id },
-      include: { [parName]: true },
+      select: { [parName]: true },
     });
     return modelResponse[parName];
   },
@@ -40,50 +41,54 @@ export const resolvers = {
     ...createFieldResolver('user', 'bundleLikes'),
   },
   Query: {
-    hello: (parent, args, context) => 'hi!',
-    feed: (parent, { data: { id } }, { prisma }) =>
+    hello: (parent, args, context: Context) => 'hi!',
+    feed: (parent, { data: { id } }, { prisma }: Context) =>
       prisma.feed.findUnique({ where: { id } }),
-    feeds: (parent, args, { prisma }) => prisma.feed.findMany(),
-    bundle: (parent, { data: { id } }, { prisma }) =>
+    feeds: (parent, args, { prisma }: Context) => prisma.feed.findMany(),
+    bundle: (parent, { data: { id } }, { prisma }: Context) =>
       prisma.bundle.findUnique({ where: { id } }),
-    bundles: (parent, args, { prisma }) => prisma.bundle.findMany(),
-    findFeedTags: (parent, { data }, { prisma }) =>
-      prisma.feedTag.findMany({ where: { name: { contains: data.search } } }),
-    findBundleTags: (parent, { data }, { prisma }) =>
-      prisma.bundleTag.findMany({ where: { name: { contains: data.search } } }),
-    findFeeds: (parent, { data }, { prisma }) =>
-      prisma.feed.findMany({ where: { name: { contains: data.search } } }),
-    savedArticle: async (
+    bundles: (parent, args, { prisma }: Context) => prisma.bundle.findMany(),
+    findFeedTags: (parent, { data }, { prisma }: Context) =>
+      prisma.feedTag.findMany({
+        where: { name: { contains: data.search, mode: 'insensitive' } },
+      }),
+    findBundleTags: (parent, { data }, { prisma }: Context) =>
+      prisma.bundleTag.findMany({
+        where: { name: { contains: data.search, mode: 'insensitive' } },
+      }),
+    findFeeds: (parent, { data }, { prisma }: Context) =>
+      prisma.feed.findMany({
+        where: { name: { contains: data.search, mode: 'insensitive' } },
+      }),
+    savedArticle: (
       parent,
       { data: { url } },
-      { prisma, user: { id: authorId } },
-    ) => {
-      const savedArticles = await prisma.savedArticle.findMany({
-        where: { url, authorId },
-      });
-      return savedArticles[0];
-    },
-    savedArticles: (parent, args, { prisma, user: { id: authorId } }) =>
+      { prisma, user: { id: authorId } }: Context,
+    ) =>
+      prisma.savedArticle.findUnique({
+        where: { id: `${authorId}-${url}` },
+      }),
+    savedArticles: (
+      parent,
+      args,
+      { prisma, user: { id: authorId } }: Context,
+    ) =>
       prisma.savedArticle.findMany({
         where: { authorId: authorId ? authorId : null },
       }),
-    me: (parent, args, { prisma, user: { id } }) =>
+    me: (parent, args, { prisma, user: { id } }: Context) =>
       prisma.user.findUnique({ where: { id } }),
   },
   Mutation: {
-    createFeed: async (parent, { data }, { prisma, user }) => {
-      const author = { author: { connect: { id: user.id } } };
-      const result = await prisma.feed.create({ data: { ...data, ...author } });
-      return result;
-    },
-    createBundle: async (parent, { data }, { prisma, user }) => {
-      const author = { author: { connect: { id: user.id } } };
-      const result = await prisma.bundle.create({
-        data: { ...data, ...author },
-      });
-      return result;
-    },
-    likeBundle: (parent, { data }, { prisma, user }) => {
+    createFeed: (parent, { data }, { prisma, user }: Context) =>
+      prisma.feed.create({
+        data: { ...data, author: { connect: { id: user.id } } },
+      }),
+    createBundle: (parent, { data }, { prisma, user }: Context) =>
+      prisma.bundle.create({
+        data: { ...data, author: { connect: { id: user.id } } },
+      }),
+    likeBundle: (parent, { data }, { prisma, user }: Context) => {
       const { bundleId, likeState } = data;
       const connectState = likeState ? 'connect' : 'disconnect';
       return prisma.bundle.update({
@@ -91,7 +96,7 @@ export const resolvers = {
         data: { likes: { [connectState]: { id: user.id } } },
       });
     },
-    likeFeed: (parent, { data }, { prisma, user }) => {
+    likeFeed: (parent, { data }, { prisma, user }: Context) => {
       const { feedId, likeState } = data;
       const connectState = likeState ? 'connect' : 'disconnect';
       return prisma.feed.update({
@@ -102,7 +107,7 @@ export const resolvers = {
     updateFeed: async (
       parent,
       { data: { id, ...feedUpdate } },
-      { prisma, user },
+      { prisma, user }: Context,
     ) => {
       const feed = await prisma.feed.findUnique({
         where: { id },
@@ -114,7 +119,7 @@ export const resolvers = {
     updateBundle: async (
       parent,
       { data: { id, ...bundleUpdate } },
-      { prisma, user },
+      { prisma, user }: Context,
     ) => {
       const bundle = await prisma.bundle.findUnique({
         where: { id },
@@ -123,11 +128,19 @@ export const resolvers = {
       await verifyOwnership(bundle, user);
       return prisma.bundle.update({ where: { id }, data: { ...bundleUpdate } });
     },
-    createSavedArticle: async (parent, { data }, { prisma, user }) => {
-      const author = { author: { connect: { id: user.id } } };
-      return prisma.savedArticle.create({ data: { ...data, ...author } });
-    },
-    deleteBundle: async (parent, { data: { id } }, { prisma, user }) => {
+    createSavedArticle: async (parent, { data }, { prisma, user }: Context) =>
+      prisma.savedArticle.create({
+        data: {
+          ...data,
+          id: `${user.id}-${data.url}`,
+          author: { connect: { id: user.id } },
+        },
+      }),
+    deleteBundle: async (
+      parent,
+      { data: { id } },
+      { prisma, user }: Context,
+    ) => {
       const bundle = await prisma.bundle.findUnique({
         where: { id },
         include: { author: true },
@@ -136,7 +149,7 @@ export const resolvers = {
       await prisma.bundle.delete({ where: { id: bundle.id } });
       return bundle;
     },
-    deleteFeed: async (parent, { data: { id } }, { prisma, user }) => {
+    deleteFeed: async (parent, { data: { id } }, { prisma, user }: Context) => {
       const feed = await prisma.feed.findUnique({
         where: { id },
         include: { author: true },
@@ -145,7 +158,11 @@ export const resolvers = {
       await prisma.feed.delete({ where: { id: feed.id } });
       return feed;
     },
-    deleteSavedArticle: async (parent, { data: { id } }, { prisma, user }) => {
+    deleteSavedArticle: async (
+      parent,
+      { data: { id } },
+      { prisma, user }: Context,
+    ) => {
       const savedArticle = await prisma.savedArticle.findUnique({
         where: { id },
         include: { author: true },

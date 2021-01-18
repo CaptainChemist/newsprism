@@ -1,7 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Feed } from '@prisma/client';
 import * as _ from 'lodash';
-import { v4 as uuidv4 } from 'uuid';
 import stripHTML from 'string-strip-html';
 import {
   CREATE_SAVED_ARTICLE_MUTATION,
@@ -65,7 +64,6 @@ export const OneArticle = ({ article, feed }: { article; feed: Feed }) => {
             } else {
               const newSavedArticle = {
                 data: {
-                  id: uuidv4(),
                   url: article.link,
                   content: article,
                   feed: {
@@ -84,6 +82,7 @@ export const OneArticle = ({ article, feed }: { article; feed: Feed }) => {
                   return {
                     __typename: 'Mutation',
                     ['createSavedArticle']: {
+                      id: `${user.id}-${newSavedArticle.data.url}`,
                       ...newSavedArticle.data,
                       user,
                       feed,
