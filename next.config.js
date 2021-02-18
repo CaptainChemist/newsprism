@@ -13,6 +13,7 @@ const {
 module.exports = {
   publicRuntimeConfig: {
     BACKEND_URL: `${BACKEND_ADDRESS}/api/graphql`,
+    CORS_URL: `${BACKEND_ADDRESS}/api/cors`,
   },
   serverRuntimeConfig: {
     auth: {

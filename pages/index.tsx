@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { GenerateArticleList } from '../components/generateArticleList';
 import { ItemList } from '../components/itemList';
 import { Layout } from '../components/layout';
 import { ItemType, SelectedFeedState } from '../utils/types';
@@ -21,6 +22,11 @@ const IndexPage = () => {
         useSelected={true}
         type={ItemType.BundleType}
       />
+      {selected.feeds.length > 0 ? (
+        <GenerateArticleList feeds={selected.feeds} />
+      ) : (
+        <h3>No Bundle Selected</h3>
+      )}
     </Layout>
   );
 };

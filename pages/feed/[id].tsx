@@ -1,4 +1,5 @@
 import { useQuery } from '@apollo/client';
+import { GenerateArticleList } from '../../components/generateArticleList';
 import { Layout } from '../../components/layout';
 import { NotifyError } from '../../components/notifyError';
 import { NotifyLoading } from '../../components/notifyLoading';
@@ -44,6 +45,7 @@ const Feed = ({ id }) => {
         ) : (
           <p>None are present. Why not add one?</p>
         )}
+        <GenerateArticleList feeds={[feed]} />
       </div>
     </Layout>
   );

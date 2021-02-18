@@ -27,9 +27,11 @@
     "lodash": "^4.17.20",
     "micro-cors": "^0.1.1",
     "next": "^10.0.3",
+    "next-http-proxy-middleware": "^1.0.9",
     "postcss": "^8.1.7",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "rss-parser": "^3.10.0",
     "tailwindcss": "^2.0.2",
     "uuid": "^8.3.2"
   },
