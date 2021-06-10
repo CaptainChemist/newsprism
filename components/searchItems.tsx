@@ -70,7 +70,7 @@ export const SearchItems = ({
                 ...currState,
                 [fieldName]: [
                   ...currState[fieldName],
-                  { ...dummyNewItem.tags[0] },
+                  { ...dummyNewItem[fieldName][0] },
                 ],
               }));
               setSearch(() => '');

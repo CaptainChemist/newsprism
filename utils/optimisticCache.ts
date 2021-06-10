@@ -9,6 +9,7 @@ export const optimisticCache = (isFeed, action, data, currentItem, meData) => {
     id,
     ...currentItem,
     [isFeed ? 'bundles' : 'feeds']: [],
+    likes: [],
     tags: [
       ...currentItem.tags.filter((tag) => _.has(tag, 'id')),
       ..._.get(data, 'tags.create', []).map((tag) => ({

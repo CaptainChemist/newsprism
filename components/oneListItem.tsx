@@ -9,7 +9,7 @@ import {
   ItemType,
   SelectedFeedState,
 } from '../utils/types';
-import { useFetchUser } from '../utils/user';
+import { useUser } from '@auth0/nextjs-auth0';
 import { BadgeList } from './badgeList';
 import { ItemEdit } from './itemEdit';
 import { ItemDelete } from './itemDelete';
@@ -35,14 +35,14 @@ export const OneListItem = ({
 }) => {
   const isFeed = type === ItemType.FeedType;
   const isSelected = useSelected && selected && selected.id === item.id;
-  const { user, loading } = useFetchUser();
+  const { user, error, isLoading } = useUser();
 
-  if (loading) {
+  if (isLoading) {
     return <WaitingClock className="h-10 w-10 text-gray-500 m-auto" />;
   }
 
   const canManipulate =
-    !loading &&
+    !isLoading &&
     user &&
     _.get(item, 'author.auth0') === user.sub &&
     allowEdits &&

@@ -1,5 +1,5 @@
 import { PrismaClient, User } from '@prisma/client';
-import auth0 from '../auth0';
+import { getSession } from '@auth0/nextjs-auth0';
 import { v4 as uuidv4 } from 'uuid';
 
 let prisma: PrismaClient;
@@ -15,9 +15,9 @@ if (process.env.NODE_ENV === 'production') {
   // https://github.com/blitz-js/blitz/blob/canary/examples/tailwind/db/index.ts
 }
 
-export const context = async ({ req }) => {
+export const context = async ({ req, res }) => {
   try {
-    const { user: auth0User } = await auth0.getSession(req);
+    const { user: auth0User } = await getSession(req, res);
 
     let user = await prisma.user.findUnique({
       where: { auth0: auth0User.sub },

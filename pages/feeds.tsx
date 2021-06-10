@@ -5,10 +5,10 @@ import { Layout } from '../components/layout';
 import { NewEditItem } from '../components/newEditItem';
 import { Minus, Plus } from '../components/svg';
 import { ItemType, SelectedFeedState } from '../utils/types';
-import { useFetchUser } from '../utils/user';
+import { useUser } from '@auth0/nextjs-auth0';
 
 const FeedsPage = () => {
-  const { user, loading } = useFetchUser();
+  const { user, error, isLoading } = useUser();
   const initialSelected: SelectedFeedState = {
     id: null,
     feeds: [],

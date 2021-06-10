@@ -7,7 +7,7 @@ import {
   DELETE_SAVED_ARTICLE_MUTATION,
 } from '../utils/api/graphql/mutations';
 import { ME_QUERY, SAVED_ARTICLE_QUERY } from '../utils/api/graphql/queries';
-import { useFetchUser } from '../utils/user';
+import { useUser } from '@auth0/nextjs-auth0';
 import { HeartOutline, SingleArrowRight } from './svg';
 import { updateSavedArticleCache } from '../utils/update';
 
@@ -21,7 +21,7 @@ export const OneArticle = ({ article, feed }: { article; feed: Feed }) => {
     data,
   } = useQuery(SAVED_ARTICLE_QUERY, { variables });
 
-  const { user, loading: userLoading } = useFetchUser();
+  const { user, isLoading: userLoading } = useUser();
   const { data: meData, loading: userLoadingQuery } = useQuery(ME_QUERY);
   const [
     createSavedArticleMutation,

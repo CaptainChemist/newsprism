@@ -16,18 +16,28 @@ If you just want the finished product, you can clone this repo and the `mater` b
 
 ### How to use this Project
 
-If you just want to run the app, check out the latest on the `master` branch and then create a `.env` file in the root of your file.
+If you just want to run the app, check out the latest on the `master` branch and then create a `.env` file in the root of your file. This `.env` has changed with the latest version of nextjs-auth0 package, so I include the lower block so you can see how the variable names changed with the latest version of nextjs-auth0- you only need the top block of variables.
 
 _.env_
 
 ```
-DATABASE_URL='postgresql://postgres:postgres@localhost:5432/yourdatabasename'
-AUTH0_CLIENTID=xxxx
-AUTH0_DOMAIN=yyyy.us.auth0.com
-AUTH0_CLIENT_SECRET=zzzzzz
+# NEW ENVIRONMENTAL VARIABLES
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/prisma?schema=public"
+AUTH0_CLIENT_ID=xxxx
+AUTH0_ISSUER_BASE_URL='https://yyyy.us.auth0.com'
+AUTH0_CLIENT_SECRET=zzzzz
 AUTH0_SCOPE='openid profile'
-AUTH0_COOKIE='some-really-long-string-has-to-be-at-least-40-characters'
-BACKEND_ADDRESS=http://localhost:3000
+AUTH0_SECRET='some-really-long-string-has-to-be-at-least-40-characters'
+AUTH0_BASE_URL=http://localhost:3000
+
+# OLD ENVIRONMENTAL VARIABLES- DO NOT USE WITH STEP 33 OR LATER
+#DATABASE_URL="postgresql://postgres:postgres@localhost:5432/prisma?schema=public"
+#AUTH0_CLIENTID=xxxx
+#AUTH0_DOMAIN=yyyy.us.auth0.com
+#AUTH0_CLIENT_SECRET=zzzzz
+#AUTH0_SCOPE='openid profile'
+#AUTH0_COOKIE='some-really-long-string-has-to-be-at-least-40-characters'
+#BACKEND_ADDRESS=http://localhost:3000
 ```
 
 You can get the Auth0 credentials by following the video in step 3. The database will get set up in step 2 when we configure Prisma 2.

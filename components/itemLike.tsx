@@ -6,7 +6,7 @@ import {
 } from '../utils/api/graphql/mutations';
 import { ME_QUERY } from '../utils/api/graphql/queries';
 import { BundleObject, FeedObject, ItemType } from '../utils/types';
-import { useFetchUser } from '../utils/user';
+import { useUser } from '@auth0/nextjs-auth0';
 import { HeartOutline } from './svg';
 
 export const ItemLike = ({
@@ -23,7 +23,7 @@ export const ItemLike = ({
   );
   const { data: meData, loading: userLoadingQuery } = useQuery(ME_QUERY);
 
-  const { user, loading: fetchUserLoading } = useFetchUser();
+  const { user, error, isLoading: fetchUserLoading } = useUser();
   const likeMatches = item.likes.filter(
     (oneLike) => oneLike.auth0 === (user ? user.sub : ''),
   );

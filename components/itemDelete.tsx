@@ -6,7 +6,7 @@ import {
 } from '../utils/api/graphql/mutations';
 import { BUNDLES_QUERY, FEEDS_QUERY } from '../utils/api/graphql/queries';
 import { BundleObject, FeedObject, ItemType } from '../utils/types';
-import { useFetchUser } from '../utils/user';
+import { useUser } from '@auth0/nextjs-auth0';
 import { Spin, Delete } from './svg';
 
 export const ItemDelete = ({
@@ -22,7 +22,7 @@ export const ItemDelete = ({
   const [deleteItemMutation, { loading: deleteItemLoading }] = useMutation(
     isFeed ? DELETE_FEED_MUTATION : DELETE_BUNDLE_MUTATION,
   );
-  const { user, loading } = useFetchUser();
+  const { user, error, isLoading } = useUser();
 
   return (
     <>
@@ -122,7 +122,7 @@ export const ItemDelete = ({
         }}
         className="flex col-span-1 py-2 px-1 z-10"
       >
-        {deleteItemLoading || loading || !user ? (
+        {deleteItemLoading || isLoading || !user ? (
           <Spin className="h-6 w-6 text-gray-500 animate-spin" />
         ) : (
           <Delete className="h-6 w-6 text-red-500" />
